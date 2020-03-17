@@ -1,4 +1,4 @@
-# Copyright (C) 2019 Paranoid Android
+# Copyright (C) 2020 Paranoid Android
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -107,6 +107,8 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.adb.secure=1
 else
 # Disable ADB authentication
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.adb.secure=0
+PRODUCT_PACKAGES += \
+    adb_root
 endif
 
 # Include the custom PA bootanimation
@@ -134,11 +136,13 @@ else
 include vendor/pa/sdclang/sdclang.mk
 endif
 
-# Speed Dexpreopt Package List
-PRODUCT_DEXPREOPT_SPEED_APPS += \
-    ParanoidQuickStep \
-    Settings \
-    SystemUI
+# Optimize everything for preopt
+PRODUCT_DEX_PREOPT_DEFAULT_COMPILER_FILTER := everything
+
+# Use default filter for problematic apps
+PRODUCT_DEXPREOPT_QUICKEN_APPS += \
+    Dialer \
+    ChromePublic
 
 # Enable ALLOW_MISSING_DEPENDENCIES on Vendorless Builds
 ifeq ($(BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE),)
@@ -156,6 +160,16 @@ SKIP_BOOT_JARS_CHECK := true
 PRODUCT_PACKAGES += \
     charger_res_images \
     product_charger_res_images
+
+# HIDL
+PRODUCT_PACKAGES += \
+    android.hidl.base@1.0 \
+    android.hidl.manager@1.0 \
+    android.hidl.base@1.0.vendor \
+    android.hidl.manager@1.0.vendor
+
+# Move Wi-Fi modules to vendor
+PRODUCT_VENDOR_MOVE_ENABLED := true
 
 $(call inherit-product-if-exists, vendor/partner_gms/products/gms.mk)
 $(call inherit-product-if-exists, vendor/partner_gms/products/turbo.mk)

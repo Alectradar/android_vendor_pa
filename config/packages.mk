@@ -23,6 +23,7 @@ PRODUCT_PACKAGES += \
     LatinIME \
     LiveWallpapers \
     LiveWallpapersPicker \
+    ParanoidPapers \
     MarkupGoogle \
     Longshot \
     ParanoidQuickStep \
@@ -70,6 +71,7 @@ PRODUCT_PACKAGES += \
     htop \
     lib7z \
     libsepol \
+    nano \
     pigz \
     powertop \
     setcap \
