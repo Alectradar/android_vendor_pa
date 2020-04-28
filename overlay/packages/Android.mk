@@ -20,7 +20,8 @@ LOCAL_REQUIRED_MODULES := \
     AccentColorPixelBlueOverlay \
     AccentColorCrimsonOverlay \
     AccentColorTealOverlay \
-	FontGoogleSansOverlay
+    FontGoogleSansOverlay \
+    FontSlateForOnePlusOverlay
 
 include $(BUILD_PHONY_PACKAGE)
 include $(call first-makefiles-under,$(LOCAL_PATH))

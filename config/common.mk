@@ -29,10 +29,12 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     ro.error.receiver.system.apps=com.google.android.gms \
     ro.opa.eligible_device=true \
     ro.setupwizard.enterprise_mode=1 \
+    setupwizard.theme=glif_v3_light \
     ro.storage_manager.enabled=true \
     ro.url.legal=http://www.google.com/intl/%s/mobile/android/basic/phone-legal.html \
     ro.url.legal.android_privacy=http://www.google.com/intl/%s/mobile/android/basic/privacy.html \
-    ro.boot.vendor.overlay.theme=com.android.internal.systemui.navbar.gestural
+    ro.boot.vendor.overlay.theme=com.android.internal.systemui.navbar.gestural \
+    persist.sys.fflag.override.settings_network_and_internet_v2=true
 
 ifeq ($(PRODUCT_GMS_CLIENTID_BASE),)
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
@@ -76,6 +78,7 @@ PRODUCT_COPY_FILES += \
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/handheld_core_hardware.xml \
+    vendor/pa/config/permissions/pa-default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/pa-default-permissions.xml \
     vendor/pa/config/permissions/privapp-permissions-pa-system.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-pa.xml \
     vendor/pa/config/permissions/privapp-permissions-pa-product.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-pa.xml
 
@@ -83,11 +86,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,vendor/pa/prebuilt/fonts,$(TARGET_COPY_OUT_PRODUCT)/fonts) \
 	vendor/pa/prebuilt/etc/fonts_customization.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/fonts_customization.xml
-
-# Markup Google
-PRODUCT_COPY_FILES += \
-    vendor/pa/prebuilt/lib/libsketchology_native.so:system/lib/libsketchology_native.so \
-    vendor/pa/prebuilt/lib64/libsketchology_native.so:system/lib64/libsketchology_native.so
 
 # Enforce privapp-permissions whitelist
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
@@ -99,6 +97,7 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
 PRODUCT_MINIMIZE_JAVA_DEBUG_INFO := true
 
 # Common overlay
+PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += vendor/pa/overlay/common
 DEVICE_PACKAGE_OVERLAYS += vendor/pa/overlay/common
 
 ifeq ($(TARGET_BUILD_VARIANT),user)
@@ -123,6 +122,11 @@ include vendor/pa/config/packages.mk
 # PA version
 include vendor/pa/config/version.mk
 
+# QCOM
+include vendor/pa/config/qcom_utils.mk
+# Include Common Qualcomm Device Tree on Qualcomm Boards
+$(call inherit-product-if-exists, device/qcom/common/common.mk)
+
 # Sdclang
 ifneq ($(HOST_OS),linux)
 ifneq ($(sdclang_already_warned),true)
@@ -138,11 +142,6 @@ endif
 
 # Optimize everything for preopt
 PRODUCT_DEX_PREOPT_DEFAULT_COMPILER_FILTER := everything
-
-# Use default filter for problematic apps
-PRODUCT_DEXPREOPT_QUICKEN_APPS += \
-    Dialer \
-    ChromePublic
 
 # Enable ALLOW_MISSING_DEPENDENCIES on Vendorless Builds
 ifeq ($(BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE),)
@@ -171,5 +170,31 @@ PRODUCT_PACKAGES += \
 # Move Wi-Fi modules to vendor
 PRODUCT_VENDOR_MOVE_ENABLED := true
 
+# SECCOMP Extension
+BOARD_SECCOMP_POLICY += vendor/pa/seccomp
+
+# video seccomp policy files
+PRODUCT_COPY_FILES += \
+    vendor/pa/seccomp/codec2.software.ext.policy:$(TARGET_COPY_OUT)/etc/seccomp_policy/codec2.software.ext.policy \
+    vendor/pa/seccomp/codec2.vendor.ext.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/codec2.vendor.ext.policy \
+    vendor/pa/seccomp/mediacodec-seccomp.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy \
+    vendor/pa/seccomp/mediaextractor-seccomp.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediaextractor.policy
+
+ifneq ($(TARGET_DISABLES_GAPPS), true)
+
+# Inherit GApps Makefiles
 $(call inherit-product-if-exists, vendor/partner_gms/products/gms.mk)
 $(call inherit-product-if-exists, vendor/partner_gms/products/turbo.mk)
+$(call inherit-product-if-exists, vendor/gapps/config.mk)
+
+# Do not preoptimize prebuilts when building GApps
+DONT_DEXPREOPT_PREBUILTS := true
+
+else
+
+# Use default filter for problematic AOSP apps
+PRODUCT_DEXPREOPT_QUICKEN_APPS += \
+    Dialer \
+    ChromePublic
+
+endif #TARGET_DISABLES_GAPPS

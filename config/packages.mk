@@ -1,4 +1,4 @@
-# Copyright (C) 2019 Paranoid Android
+# Copyright (C) 2020 Paranoid Android
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,23 +17,36 @@ ifneq ($(TARGET_USES_AOSP_CAMERA),true)
 PRODUCT_PACKAGES += ParanoidCamera
 endif
 PRODUCT_PACKAGES += \
-    ChromePublic \
     SoundRecorder \
     WallpaperPicker \
     LatinIME \
     LiveWallpapers \
     LiveWallpapersPicker \
-    ParanoidPapers \
-    MarkupGoogle \
     Longshot \
+    ParanoidPapers \
     ParanoidQuickStep \
     ThemePicker \
-    #ParanoidHub
+    ParanoidHub
+
+ifeq ($(TARGET_SUPPORTS_64_BIT_APPS), true)
+TARGET_ENABLE_FACE_SENSE := true
+PRODUCT_PACKAGES += \
+    ParanoidFaceSense
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    ro.face.sense_service=$(TARGET_ENABLE_FACE_SENSE)
+endif
+
+ifeq ($(TARGET_DISABLES_GAPPS), true)
+PRODUCT_PACKAGES += \
+    ChromePublic \
+    MarkupGoogle \
+    MatchmakerPrebuilt
+endif
 
 # Paranoid Android Overlays
 PRODUCT_PACKAGES += \
     pa-overlays \
-	ParanoidOverlayStub
+    ParanoidOverlayStub
 
 # Snapdragon apps
 PRODUCT_PACKAGES += \
@@ -44,9 +57,6 @@ PRODUCT_PACKAGES += Abstruct
 
 # Retro Music Player
 PRODUCT_PACKAGES += RetroMusicPlayer
-
-# Device Personalization Services
-PRODUCT_PACKAGES += MatchmakerPrebuilt
 
 # CAF packages
 # TCP Connection Management

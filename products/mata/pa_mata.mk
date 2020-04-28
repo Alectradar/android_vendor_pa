@@ -33,11 +33,6 @@ $(call inherit-product, device/essential/mata/device.mk)
 # Inherit from the PA configuration.
 $(call inherit-product, vendor/pa/config/common_full_phone.mk)
 
-# Include the common CAF configurations.
-$(call inherit-product, device/qcom/common/common.mk)
-$(call inherit-product, vendor/qcom/common/av/qti-av.mk)
-$(call inherit-product, vendor/qcom/common/perf/qti-perf.mk)
-
 # Recovery FStab
 TARGET_RECOVERY_FSTAB := device/essential/mata/rootdir/etc/fstab.mata
 
@@ -57,10 +52,9 @@ PRODUCT_RELEASE_NAME := mata
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
         PRODUCT_NAME=mata \
-        PRIVATE_BUILD_DESC="mata-user 10 QQ1A.200105.032 540 release-keys"
+        PRIVATE_BUILD_DESC="mata-userdebug 10 QQ1A.200105.088 590 test-keys"
 
-BUILD_FINGERPRINT := essential/mata/mata:10/QQ1A.200105.032/540:user/release-keys
-
+BUILD_FINGERPRINT := essential/mata/mata:10/QQ1A.200105.088/590:userdebug/test-keys
 PRODUCT_ACTIONABLE_COMPATIBLE_PROPERTY_DISABLE := true
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
 
