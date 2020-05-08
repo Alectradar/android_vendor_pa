@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Paranoid Android
+# Copyright (C) 2019 Paranoid Android
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,35 +13,32 @@
 # limitations under the License.
 
 # Check for target product
-ifeq (pa_cepheus,$(TARGET_PRODUCT))
+ifeq (pa_chiron,$(TARGET_PRODUCT))
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 
-# Include Paranoid Android common configuration
 TARGET_BOOT_ANIMATION_RES := 1080
 
 # Inherit device configuration
-$(call inherit-product, device/xiaomi/cepheus/msmnile.mk)
+$(call inherit-product, device/xiaomi/chiron/device.mk)
 
 # Inherit common PA configuration
 $(call inherit-product, vendor/pa/config/common_full_phone.mk)
 
 # Override build properties
-PRODUCT_NAME := pa_cepheus
-PRODUCT_DEVICE := cepheus
+PRODUCT_NAME := pa_chiron
+PRODUCT_DEVICE := chiron
 PRODUCT_BRAND := Xiaomi
-PRODUCT_MODEL := MI 9
+PRODUCT_MODEL := Mi MIX 2
 PRODUCT_MANUFACTURER := Xiaomi
 
-BUILD_FINGERPRINT := "Xiaomi/cepheus_eea/cepheus:10/QKQ1.190825.002/V11.0.8.0.QFAEUXM:user/release-keys"
+PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRIVATE_BUILD_DESC="cepheus-user-10-QKQ1.190825.002-V11.0.8.0.QFAEUXM-release-keys" \
-    PRODUCT_NAME="cepheus" \
-    TARGET_DEVICE="cepheus"
+    PRIVATE_BUILD_DESC="chiron-user 8.0.0 OPR1.170623.027 V9.5.4.0.ODEMIFA release-keys"
 
-PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
+BUILD_FINGERPRINT := Xiaomi/chiron/chiron:8.0.0/OPR1.170623.027/V9.5.4.0.ODEMIFA:user/release-keys
 
 endif

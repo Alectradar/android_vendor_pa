@@ -18,6 +18,7 @@ PRODUCT_MAKEFILES += \
     $(LOCAL_DIR)/A6020/pa_A6020.mk \
     $(LOCAL_DIR)/beryllium/pa_beryllium.mk \
     $(LOCAL_DIR)/cepheus/pa_cepheus.mk \
+    $(LOCAL_DIR)/chiron/pa_chiron.mk \
     $(LOCAL_DIR)/davinci/pa_davinci.mk \
     $(LOCAL_DIR)/dipper/pa_dipper.mk \
     $(LOCAL_DIR)/mata/pa_mata.mk \
@@ -29,6 +30,7 @@ PRODUCT_MAKEFILES += \
     $(LOCAL_DIR)/oneplus7t/pa_oneplus7t.mk \
     $(LOCAL_DIR)/oneplus7tpro/pa_oneplus7tpro.mk \
     $(LOCAL_DIR)/polaris/pa_polaris.mk \
+    $(LOCAL_DIR)/rolex/pa_rolex.mk \
     $(LOCAL_DIR)/rosy/pa_rosy.mk \
     $(LOCAL_DIR)/sagit/pa_sagit.mk \
     $(LOCAL_DIR)/X00TD/pa_X00TD.mk \
@@ -51,6 +53,7 @@ COMMON_LUNCH_CHOICES += \
     pa_A6020-userdebug \
     pa_beryllium-userdebug \
     pa_cepheus-userdebug \
+    pa_chiron-userdebug \
     pa_davinci-userdebug \
     pa_dipper-userdebug \
     pa_dora-userdebug \
@@ -65,6 +68,7 @@ COMMON_LUNCH_CHOICES += \
     pa_oneplus7t-userdebug \
     pa_oneplus7tpro-userdebug \
     pa_polaris-userdebug \
+    pa_rolex-userdebug \
     pa_rosy-userdebug \
     pa_sagit-userdebug \
     pa_suzu-userdebug \
